@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+body {
+  margin: 0;
+  background-color: rgb(236, 241, 247);
+}
+
+.fontBold {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+}
+
+.fontMed {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+}
+
+.fontReg {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+
+#x {
+  font-family: 'Playfair Display', serif;
+}

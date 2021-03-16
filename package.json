@@ -1,0 +1,39 @@
+{
+  "name": "visachallenge",
+  "version": "1.0.0",
+  "description": "Contacts list for Visa coding challenge",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack --mode development",
+    "build": "webpack --mode production",
+    "dev-server": "webpack serve --mode development",
+    "server": "nodemon server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/derekvelzy/visaChallenge.git"
+  },
+  "author": "derek velzy",
+  "homepage": "https://github.com/derekvelzy/visaChallenge#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "nodemon": "^2.0.7",
+    "webpack": "^5.26.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.5.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-spring": "^8.0.27",
+    "redux": "^4.0.5",
+    "styled-components": "^5.2.1"
+  }
+}
