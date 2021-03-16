@@ -19,9 +19,7 @@ const Header = () => {
     <Margins>
       <Modal />
       <Container>
-        <Link to="/" style={{textDecoration: 'none'}}>
-          <Title className="fontBold">Visa Contact List</Title>
-        </Link>
+        <Title className="fontBold">Visa Contact List</Title>
       </Container>
     </Margins>
   )
@@ -40,7 +38,6 @@ const Margins = styled.div`
 `
 const Title = styled.div`
   color: white;
-  cursor: pointer;
   font-size: 28px;
   margin-left: 5vw;
 `

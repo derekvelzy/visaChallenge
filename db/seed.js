@@ -68,6 +68,7 @@ seed = async () => {
       }
     })
   }
+  console.log('Seeded Database!')
 };
 
 seed();

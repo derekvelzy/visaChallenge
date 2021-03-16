@@ -21,6 +21,12 @@ const EditPage = () => {
   const [phoneErr, setPhoneErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
 
+  useEffect(() => {
+    if (!id) {
+      history.push('/');
+    }
+  }, []);
+
   const submit = () => {
     setFirstErr(false);
     setLastErr(false);
