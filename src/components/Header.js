@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
+import { useSelector } from 'react-redux';
+import Modal from './Home/Modal.js'
 
 const Header = () => {
+  const { open } = useSelector(state => state.modal);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [open]);
+
   return (
-    <Container>
-      <Title className="fontBold">Visa Contact List</Title>
-    </Container>
+    <Margins>
+      <Modal />
+      <Container>
+        <Title className="fontBold">Visa Contact List</Title>
+      </Container>
+    </Margins>
   )
 };
 
 const Container = styled.div`
   background: linear-gradient(90.13deg, #2831FF 28.2%, #2831FF 28.21%, #0208A6 99.99%, #0006A2 99.99%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  position: absolute;
   width: 100vw;
   height: 60px;
-  left: 0px;
-  top: 0px;
   display: flex;
   align-items: center;
+`
+const Margins = styled.div`
+  margin-left: -5vw;
 `
 const Title = styled.div`
   color: white;
   font-size: 28px;
-  margin-left: 60px;
+  margin-left: 5vw;
 `
 
 export default Header;

@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import Header from '../Header.js';
-import Search from './Search.js';
+import Create from './Create.js';
 import Contact from './Contact.js';
+import Modal from './Modal.js';
+import { setContacts } from '../../redux/contacts.js';
 
 const Main = () => {
+  const { contacts } = useSelector(state => state.contact);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getContacts();
+  }, []);
+
+  const getContacts = () => {
+    axios.get('http://localhost:8000/get')
+    .then((res) => {
+      dispatch(setContacts(res.data));
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <Container>
       <Header />
-      <Search />
+      <Create />
       <Contacts>
-        <Contact first="John" last="Coltrane" number="(123) 456-7890" email="jcoltrane@gmail.com" />
-        <Contact first="Miles" last="Davis" number="(123) 456-7890" email="mdavis@gmail.com" />
-        <Contact first="Joe" last="Pass" number="(123) 456-7890" email="jpass@gmail.com" />
+        {contacts.map((i) => (
+          <Contact first={i.first} last={i.last} number={i.phone} email={i.email} key={i._id}/>
+        ))}
       </Contacts>
     </Container>
   )
 };
 
 const Contacts = styled.div`
-  position: absolute;
-  top: 140px;
+  // position: absolute;
+  // top: 140px;
+  padding-bottom: 200px;
 `
 const Container = styled.div`
   margin-left: 5vw;

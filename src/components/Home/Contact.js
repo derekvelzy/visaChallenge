@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCard } from '../../redux/card.js';
+import { setModal } from '../../redux/modal.js';
 
 const Contact = ({first, last, number, email}) => {
   const { selectedEmail, lastEmail } = useSelector(state => state.card);
@@ -18,7 +19,7 @@ const Contact = ({first, last, number, email}) => {
       },
       {
         // Slides the last card to the left AND animates selected card slighly as to not move yet
-        marginLeft: lastEmail === email ? "0vw" : (selectedEmail === email ? "-1vw" : "0vw"),
+        marginLeft: "0vw",
         width: "40vw", // Sets all cards back to the same width
         justifyContent: "flex-start", // Set all cards back to justify start
         flexDirection: 'row', // Set all cards back to row
@@ -31,7 +32,7 @@ const Contact = ({first, last, number, email}) => {
       },
       {
         // Simultaneously decrease the margin and increase the height of the new card
-        marginBottom: selectedEmail === email ? "-495px" : "0px",
+        marginBottom: selectedEmail === email ? "-505px" : "0px",
         height: selectedEmail === email ? "470px" : "80px",
         flexDirection: selectedEmail === email ? "column" : "row",
         justifyContent: "flex-start", // justify items to center
@@ -44,11 +45,6 @@ const Contact = ({first, last, number, email}) => {
   const picProps = useSpring({
     to: [
       { height: "49.5px", width: "49.5px"},
-      {
-        height: selectedEmail === email ? "50px" : "50px",
-        width: selectedEmail === email ? "50px" : "50px",
-        margin: "0px 30px 0px 30px",
-      },
       {
         height: selectedEmail === email ? "120px" : "50px",
         width: selectedEmail === email ? "120px" : "50px",
@@ -63,7 +59,7 @@ const Contact = ({first, last, number, email}) => {
     to: { alignItems: selectedEmail === email ? "center" : "flex-start" },
     from: {...infoStyle},
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: 700
+    delay: 100
   });
 
   const nameProps = useSpring({
@@ -73,7 +69,7 @@ const Contact = ({first, last, number, email}) => {
      },
     from: {...nameStyle},
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: lastEmail === email ? 0 : 1100
+    delay: lastEmail === email ? 0 : 600
   });
 
   const numProps = useSpring({
@@ -83,15 +79,15 @@ const Contact = ({first, last, number, email}) => {
     },
     from: {...numStyle},
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: lastEmail === email ? 0 : 1100
+    delay: lastEmail === email ? 0 : 600
   });
 
   const visProps = useSpring({
     to: { display: selectedEmail === email ? 'flex' : 'none' },
     from: { display: 'none' },
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: lastEmail === email ? 0 : 1200
-  })
+    delay: lastEmail === email ? 0 : 700
+  });
 
   return (
     <animated.div
@@ -106,7 +102,7 @@ const Contact = ({first, last, number, email}) => {
             if (selectedEmail === email) dispatch(setCard(''))
           }}
           id="x"
-        >+</Close>
+        >X</Close>
       </animated.div>
       <animated.div style={picProps} />
       <animated.div style={infoProps}>
@@ -117,7 +113,9 @@ const Contact = ({first, last, number, email}) => {
           <EditButton>Edit</EditButton>
         </animated.div>
         <animated.div style={visProps}>
-          <DeleteButton>Delete</DeleteButton>
+          <DeleteButton
+            onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}
+          >Delete</DeleteButton>
         </animated.div>
       </animated.div>
     </animated.div>
@@ -136,6 +134,7 @@ const containerStyle = {
   marginRight: "60px",
   marginTop: '35px',
   width: '40vw',
+  zIndex: 0,
 };
 const infoStyle = {
   display: 'flex',
@@ -171,22 +170,32 @@ const Close = styled.div`
   margin-bottom: -60px;
   padding: 5px 5px 5px 5px;
   width: 25px;
-  transform: rotate(45deg);
+  // transform: rotate(45deg);
   transition: all 0.3s ease;
   &:hover{
     background: #303AE4;
     color: white;
-    transform: rotate(135deg);
+    // transform: rotate(135deg);
   }
 `
 const DeleteButton = styled.button`
-  background: rgb(181, 177, 24);
+  background: rgb(171, 166, 22);
   border: 0;
   border-radius: 5px;
   box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
   color: white;
+  cursor: pointer;
   height: 40px;
   width: 100px;
+  &:hover{
+    background: rgb(189, 183, 23);
+  }
+  &:focus{
+    outline: none;
+  }
+  &:active{
+    background: rgb(145, 141, 19);
+  }
 `
 const EditButton = styled.button`
   background: linear-gradient(180deg, #303AE4 0%, #050BC4 100%);
@@ -194,9 +203,19 @@ const EditButton = styled.button`
   border-radius: 5px;
   box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
   color: white;
+  cursor: pointer;
   height: 40px;
   margin: 40px 0px 20px 0px;
   width: 100px;
+  &:hover{
+    background: #303AE4
+  }
+  &:focus{
+    outline: none;
+  }
+  &:active{
+    background: #050BC4;
+  }
 `
 
 export default Contact;
