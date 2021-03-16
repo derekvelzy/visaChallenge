@@ -1,13 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { setCard } from '../../redux/card.js';
 import { setModal } from '../../redux/modal.js';
+import { setContact } from '../../redux/edits.js';
 
-const Contact = ({first, last, number, email}) => {
+const Contact = ({ id, first, last, number, email }) => {
   const { selectedEmail, lastEmail } = useSelector(state => state.card);
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const editContact = () => {
+    dispatch(setContact({id, first, last, phone: number, email}));
+    history.push('/edit');
+  }
 
   const openProps = useSpring({
     to: [
@@ -95,14 +105,17 @@ const Contact = ({first, last, number, email}) => {
         if (selectedEmail !== email) dispatch(setCard(email))
       }}
       style={openProps}
+      className="card"
     >
-      <animated.div style={{...visProps, alignSelf: 'flex-end', marginRight: '30px', marginTop: '15px'}}>
-        <Close
+      <animated.div style={{...visProps, alignSelf: 'flex-end', marginRight: '15px', marginTop: '15px'}}>
+        <FontAwesomeIcon
           onClick={() => {
             if (selectedEmail === email) dispatch(setCard(''))
           }}
-          id="x"
-        >X</Close>
+          icon={faTimesCircle}
+          style={closeStyle}
+          id="faTimes"
+        />
       </animated.div>
       <animated.div style={picProps} />
       <animated.div style={infoProps}>
@@ -110,7 +123,7 @@ const Contact = ({first, last, number, email}) => {
         <animated.div style={numProps} className="fontReg">{number}</animated.div>
         <animated.div style={visProps} className="fontReg">{email}</animated.div>
         <animated.div style={visProps}>
-          <EditButton>Edit</EditButton>
+          <EditButton onClick={editContact}>Edit</EditButton>
         </animated.div>
         <animated.div style={visProps}>
           <DeleteButton
@@ -122,12 +135,21 @@ const Contact = ({first, last, number, email}) => {
   )
 };
 
+const closeStyle = {
+  // background: 'white',
+  // borderRadius: '50%',
+  color: '#303AE4',
+  cursor: 'pointer',
+  height: '30px',
+  marginBottom: '-60px',
+  width: '30px',
+  transition: 'all 0.3s ease',
+}
 const containerStyle = {
   cursor: 'pointer',
   alignItems: 'center',
   background: 'white',
   borderRadius: '5px',
-  boxShadow: '0px 2px 8px 2px rgba(0, 0, 0, 0.25)',
   display: 'flex',
   height: '80px',
   marginLeft: "0vw",
@@ -156,28 +178,6 @@ const picStyle = {
   width: '50px'
 };
 
-const Close = styled.div`
-  align-items: center;
-  border: 1px solid #303AE4;
-  background: white;
-  border-radius: 50%;
-  color: #303AE4;
-  cursor: pointer;
-  display: flex;
-  font-size: 20px;
-  justify-content: center;
-  height: 25px;
-  margin-bottom: -60px;
-  padding: 5px 5px 5px 5px;
-  width: 25px;
-  // transform: rotate(45deg);
-  transition: all 0.3s ease;
-  &:hover{
-    background: #303AE4;
-    color: white;
-    // transform: rotate(135deg);
-  }
-`
 const DeleteButton = styled.button`
   background: rgb(171, 166, 22);
   border: 0;

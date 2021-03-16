@@ -32,7 +32,7 @@ const Main = () => {
       <Create />
       <Contacts>
         {contacts.map((i) => (
-          <Contact first={i.first} last={i.last} number={i.phone} email={i.email} key={i._id}/>
+          <Contact id={i._id} first={i.first} last={i.last} number={i.phone} email={i.email} key={i._id}/>
         ))}
       </Contacts>
     </Container>

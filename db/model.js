@@ -22,7 +22,6 @@ module.exports = {
   },
 
   post: async (body, callback) => {
-    console.log(body);
     try {
       const post = new ContactModel({
         first: body.data.first,
@@ -43,17 +42,22 @@ module.exports = {
     }
   },
 
-  update: async (payload) => {
-    const x = await ContactModel.findOneAndUpdate(
-      {symbol: payload[i].symbol},
-      {
-        maxsupply: Math.floor(payload[i].max_supply).toString(),
-        circsupply: Math.floor(payload[i].circulating_supply).toString(),
-        totsupply: Math.floor(payload[i].total_supply).toString(),
-        rank: payload[i].cmc_rank,
-      }
-    )
-    console.log(x);
+  patch: async (body, callback) => {
+    try {
+      console.log(body.data);
+      const x = await ContactModel.findOneAndUpdate(
+        {_id: body.data.id},
+        {
+          first: body.data.first,
+          last: body.data.last,
+          phone: body.data.phone,
+          email: body.data.email
+        }
+      )
+      callback(null);
+    } catch (e) {
+      callback(e);
+    }
   },
 };
 

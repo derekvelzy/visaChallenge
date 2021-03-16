@@ -31,6 +31,16 @@ router.delete('/delete', (req, res) => {
       res.send(200);
     }
   })
-})
+});
+
+router.patch('/patch', (req, res) => {
+  model.patch(req.body, (err) => {
+    if (err) {
+      res.sendStatus(400);
+    } else {
+      res.send(200);
+    }
+  })
+});
 
 module.exports = router;

@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
 import { phoneCheck } from '../formFunctions.js';
 
-const CreatePage = () => {
+const EditPage = () => {
   const history = useHistory();
+  const { id, editFirst, editLast, editPhone, editEmail } = useSelector(state => state.edit);
   const dispatch = useDispatch();
 
-  const [first, setFirst] = useState('');
-  const [last, setLast] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [first, setFirst] = useState(editFirst);
+  const [last, setLast] = useState(editLast);
+  const [phone, setPhone] = useState(editPhone);
+  const [email, setEmail] = useState(editEmail);
   const [firstErr, setFirstErr] = useState(false);
   const [lastErr, setLastErr] = useState(false);
   const [phoneErr, setPhoneErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
 
   const submit = () => {
-    setEmailErr(false);
     setFirstErr(false);
     setLastErr(false);
     setPhoneErr(false);
@@ -35,13 +35,13 @@ const CreatePage = () => {
     const firstex = /^\w{1,}$/.test(first);
     const lastex = /^\w{1,}$/.test(last);
     const phoneex = /^.{14}$/.test(phone);
-    if (!emailex) setEmailErr(true);
     if (!firstex) setFirstErr(true);
     if (!lastex) setLastErr(true);
     if (!phoneex) setPhoneErr(true);
-    if (emailex && firstex && lastex && phoneex) {
-      axios.post('http://localhost:8000/post', {
-        data: {first, last, phone, email}
+    if (!emailex) setEmailErr(true);
+    if (firstex && lastex && phoneex && emailex) {
+      axios.patch('http://localhost:8000/patch', {
+        data: {id, first, last, phone, email}
       })
       .then(() => {
         axios.get('http://localhost:8000/get')
@@ -57,7 +57,7 @@ const CreatePage = () => {
     <Container>
       <Header />
       <Form>
-        <Title className="fontMed">Create New Contact</Title>
+        <Title className="fontMed">Edit Contact</Title>
         <Names>
           <div>
             <LabelBox style={{ width: '24vw'}}>
@@ -152,6 +152,14 @@ const Container = styled.div`
 const Error = styled.div`
   color: red;
 `
+const FixedEmail = styled.div`
+  align-self: flex-start;
+  color: rgb(110, 110, 110);
+  font-size: 20px;
+  height: 46px;
+  margin: 20px 0px 10px 0px;
+  width: 50vw;
+`
 const Form = styled.div`
   align-items: center;
   display: flex;
@@ -218,4 +226,4 @@ const Title = styled.div`
   margin-bottom: 30px;
 `
 
-export default CreatePage;
+export default EditPage;
