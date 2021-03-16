@@ -64,6 +64,6 @@ From the repo
 1. Clone the project locally
 2. Run ```npm install``` in the command line
 3. Run ```npm run seed``` in the command line to seed the database
-  - A confirmation of 'Seeded Database' should appear in the console. If so, cancel from the running command (^c on Mac).
+  - A confirmation of 'Seeded Database!' should appear in the console. If so, cancel from the running command (^c on Mac).
 4. Run ```npm run server``` in the command line to start the server
 5. Open [http://localhost:8000](http://localhost:8000) with your browser to see the result
