@@ -10,6 +10,10 @@ app.use(parser.json());
 
 app.use('/', express.static(path.join(__dirname, '/../public')), router);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../public/index.html'));
+})
+
 app.listen(port, () => {
   console.log(`>>> Listening on port ${port} <<<`);
 });

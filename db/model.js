@@ -21,13 +21,14 @@ module.exports = {
     }
   },
 
-  post: async (data, callback) => {
+  post: async (body, callback) => {
+    console.log(body);
     try {
       const post = new ContactModel({
-        first: data.first,
-        last: data.last,
-        phone: data.phone,
-        email: data.email,
+        first: body.data.first,
+        last: body.data.last,
+        phone: body.data.phone,
+        email: body.data.email,
       });
       await post.save((err) => {
         if (err) {

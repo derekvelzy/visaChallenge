@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components'
+import { Link } from "react-router-dom";
 
 const Create = () => {
 
   return (
     <Container>
-      <CreateButton className="fontMed">Create New Contact +</CreateButton>
+      <Link to="/create">
+        <CreateButton className="fontMed">Create New Contact +</CreateButton>
+      </Link>
     </Container>
   )
 };

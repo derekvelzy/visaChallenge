@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 import Modal from './Home/Modal.js'
 
 const Header = () => {
@@ -18,7 +19,9 @@ const Header = () => {
     <Margins>
       <Modal />
       <Container>
-        <Title className="fontBold">Visa Contact List</Title>
+        <Link to="/" style={{textDecoration: 'none'}}>
+          <Title className="fontBold">Visa Contact List</Title>
+        </Link>
       </Container>
     </Margins>
   )
@@ -37,6 +40,7 @@ const Margins = styled.div`
 `
 const Title = styled.div`
   color: white;
+  cursor: pointer;
   font-size: 28px;
   margin-left: 5vw;
 `
