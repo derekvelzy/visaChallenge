@@ -40,8 +40,6 @@ const Main = () => {
 };
 
 const Contacts = styled.div`
-  // position: absolute;
-  // top: 140px;
   padding-bottom: 200px;
 `
 const Container = styled.div`

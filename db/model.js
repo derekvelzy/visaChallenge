@@ -3,10 +3,40 @@ const ContactModel = require('./schema.js');
 
 
 module.exports = {
+  delete: async (data, callback) => {
+    try {
+      await ContactModel.findOneAndDelete({email: data.email});
+      callback(null);
+    } catch (e) {
+      callback(e);
+    }
+  },
+
   get: async (callback) => {
     try {
       const data = await ContactModel.find({});
       callback(null, data);
+    } catch (e) {
+      callback(e);
+    }
+  },
+
+  post: async (data, callback) => {
+    try {
+      const post = new ContactModel({
+        first: data.first,
+        last: data.last,
+        phone: data.phone,
+        email: data.email,
+      });
+      await post.save((err) => {
+        if (err) {
+          console.log('failed to add to db');
+        } else {
+          console.log('added to db');
+        }
+      })
+      callback(null);
     } catch (e) {
       callback(e);
     }

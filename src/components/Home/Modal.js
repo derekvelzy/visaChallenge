@@ -3,10 +3,26 @@ import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { useSelector, useDispatch } from 'react-redux';
 import { setModal } from '../../redux/modal.js';
+import { setContacts } from '../../redux/contacts.js';
+import axios from 'axios';
 
 const Modal = () => {
   const { open, name, email } = useSelector(state => state.modal);
   const dispatch = useDispatch();
+
+  const deleteContact = () => {
+      axios.delete('http://localhost:8000/delete', {
+        data: {email}
+      })
+      .then(() => {
+        axios.get('http://localhost:8000/get')
+        .then((res) => {
+            console.log(res.data);
+            dispatch(setContacts(res.data));
+            dispatch(setModal(''));
+        })
+      })
+  };
 
   const contentProps = useSpring({
     to: { marginBottom: open ? '0px' : '-100px' },
@@ -28,7 +44,7 @@ const Modal = () => {
       <animated.div style={contentProps}>
         <ConfirmText className="fontMed">Are you sure you want to delete {name}?</ConfirmText>
         <Buttons>
-          <YesButton className="fontMed" onClick={() => dispatch(setModal(''))}>
+          <YesButton className="fontMed" onClick={() => deleteContact()}>
             Yes
           </YesButton>
           <CloseButton className="fontMed" onClick={() => dispatch(setModal(''))}>
