@@ -7,6 +7,7 @@ import Create from './Create.js';
 import Contact from './Contact.js';
 import Modal from './Modal.js';
 import { setContacts } from '../../redux/contacts.js';
+import { Container } from '../globalComponents.js';
 
 const Main = () => {
   const { contacts } = useSelector(state => state.contact);
@@ -21,9 +22,7 @@ const Main = () => {
     .then((res) => {
       dispatch(setContacts(res.data));
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch((e) => { alert('Error getting contacts', e) });
   }
 
   return (
@@ -41,10 +40,6 @@ const Main = () => {
 
 const Contacts = styled.div`
   padding-bottom: 200px;
-`
-const Container = styled.div`
-  margin-left: 5vw;
-  width: 90vw;
 `
 
 export default Main;

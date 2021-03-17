@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
-import { phoneCheck } from '../formFunctions.js';
+import { Container, BlueButton, YellowButton } from '../globalComponents.js';
 
-const CreatePage = () => {
+const FormPage = () => {
   const history = useHistory();
+  const { id, editFirst, editLast, editPhone, editEmail } = useSelector(state => state.edit);
   const dispatch = useDispatch();
 
   const [first, setFirst] = useState('');
@@ -20,11 +21,46 @@ const CreatePage = () => {
   const [phoneErr, setPhoneErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
 
+  useEffect(() => {
+    if (!id && window.location.pathname === '/edit') {
+      history.push('/');
+    } else if (window.location.pathname === '/edit') {
+      setFirst(editFirst);
+      setLast(editLast);
+      setPhone(editPhone);
+      setEmail(editEmail);
+    }
+  }, []);
+
+  const phoneCheck = (e) => {
+    setPhoneErr(false);
+    // REGEX:
+      // ^ means the start of the string must begin with characters 0 - 9
+      // [0-9() -] means only characters between 0-9, parenths, spaces, and dashes
+      // {0,10} means the string must be between 0-10 characters long
+      // $ means the end of the string
+    if (/^[0-9() -]{0,14}$/.test(e)) {
+      const str = e.replace(/[^0-9]/g, '');
+      // REGEX:
+        // Replace the character at 0 with '(' followed by the character at 0
+        // Replace the following 3rd character with ') ' followed by the character at 3
+        // Replace the following 3rd character with '-' and the char at that position
+      let rep = str.replace(/^(.{0})/, '$1(')
+      // Add more characters to the string as the length increases
+      rep = str.length < 7 && str.length > 3 ?
+        str.replace(/^(.{0})(.{3})/, '$1($2) ') :
+        str.replace(/^(.{0})(.{3})(.{3})/, '$1($2) $3-')
+      setPhone(rep);
+    } else if (e.length < 15) {
+      setPhoneErr(true);
+    }
+  };
+
   const submit = () => {
-    setEmailErr(false);
     setFirstErr(false);
     setLastErr(false);
     setPhoneErr(false);
+    setEmailErr(false);
     // REGEX:
       // \w Starts with a word
       // @ followed by an @ character
@@ -35,37 +71,45 @@ const CreatePage = () => {
     const firstex = /^\w{1,}$/.test(first);
     const lastex = /^\w{1,}$/.test(last);
     const phoneex = /^.{14}$/.test(phone);
-    if (!emailex) setEmailErr(true);
     if (!firstex) setFirstErr(true);
     if (!lastex) setLastErr(true);
     if (!phoneex) setPhoneErr(true);
-    if (emailex && firstex && lastex && phoneex) {
-      axios.post('http://localhost:8000/post', {
-        data: {first, last, phone, email}
-      })
-      .then(() => {
-        axios.get('http://localhost:8000/get')
-        .then((res) => {
-            dispatch(setContacts(res.data));
-            history.push('/');
-        })
-      })
+    if (!emailex) setEmailErr(true);
+    if (window.location.pathname === '/edit' && firstex && lastex && phoneex && emailex) {
+      axios.patch('http://localhost:8000/patch', { data: {id, first, last, phone, email }})
+      .then(() => { resetData() })
+      .catch((e) => alert('Error updating user', e));
+    } else if (window.location.pathname === '/create' && firstex && lastex && phoneex && emailex) {
+      axios.post('http://localhost:8000/post', { data: {first, last, phone, email} })
+      .then(() => { resetData() })
+      .catch((e) => alert('Error adding user', e));
     }
   };
+
+  const resetData = () => {
+    axios.get('http://localhost:8000/get')
+      .then((res) => {
+        dispatch(setContacts(res.data));
+        history.push('/');
+      })
+      .catch((e) => alert('Error getting contacts', e));
+  }
 
   return (
     <Container>
       <Header />
       <Form>
-        <Title className="fontMed">Create New Contact</Title>
-        <Names>
+        <Title className="fontMed">
+          {window.location.pathname === '/edit' ? 'Edit Contact' : 'Create New Contact'}
+        </Title>
+        <LabelBoxAndNames>
           <div>
-            <LabelBox style={{ width: '24vw'}}>
+            <LabelBoxAndNames style={{ width: '24vw'}}>
               <Label className="fontReg">First</Label>
               <Error className="fontReg" style={firstErr ? {display: 'flex'} : {display: 'none'}}>
                 Please enter first name
               </Error>
-            </LabelBox>
+            </LabelBoxAndNames>
             <NameInput
               placeholder="jane"
               value={first}
@@ -73,45 +117,47 @@ const CreatePage = () => {
             />
           </div>
           <div>
-            <LabelBox  style={{ width: '24vw'}}>
+            <LabelBoxAndNames  style={{ width: '24vw'}}>
               <Label className="fontReg">Last</Label>
               <Error className="fontReg" style={lastErr ? {display: 'flex'} : {display: 'none'}}>
                 Please enter last name
               </Error>
-            </LabelBox>
+            </LabelBoxAndNames>
             <NameInput
               placeholder="doe"
               value={last}
               onChange={(e) => setLast(e.target.value)}
             />
           </div>
-        </Names>
-        <LabelBox>
+        </LabelBoxAndNames>
+        <LabelBoxAndNames>
           <Label className="fontReg">Phone</Label>
           <Error className="fontReg" style={phoneErr ? {display: 'flex'} : {display: 'none'}}>
             Must be valid phone number
           </Error>
-        </LabelBox>
+        </LabelBoxAndNames>
         <Input
           placeholder="(xxx) xxx-xxxx"
           value={phone}
-          onChange={(e) => phoneCheck(e.target.value, setPhone, setPhoneErr)}
+          onChange={(e) => phoneCheck(e.target.value)}
         />
-        <LabelBox>
+        <LabelBoxAndNames>
           <Label className="fontReg">Email</Label>
           <Error className="fontReg" style={emailErr ? {display: 'flex'} : {display: 'none'}}>
             Must be valid email
           </Error>
-        </LabelBox>
+        </LabelBoxAndNames>
         <Input
           placeholder="janedoe@domain.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Buttons>
-          <Submit className="fontMed" onClick={submit}>Submit</Submit>
+          <BlueButton className="fontMed" onClick={submit}>
+            {window.location.pathname === '/edit' ? 'Save' : 'Submit'}
+          </BlueButton>
           <Link to="/" style={{textDecoration: 'none'}}>
-            <Cancel className="fontMed">Cancel</Cancel>
+            <YellowButton className="fontMed">Cancel</YellowButton>
           </Link>
         </Buttons>
       </Form>
@@ -123,34 +169,18 @@ const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-  width: 280px;
-`
-const Cancel = styled.button`
-  background: rgb(171, 166, 22);
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-  height: 50px;
-  width: 120px;
-  &:hover{
-    background: rgb(189, 183, 23);
-  }
-  &:focus{
-    outline: none;
-  }
-  &:active{
-    background: rgb(145, 141, 19);
-  }
-`
-const Container = styled.div`
-  margin-left: 5vw;
-  width: 90vw;
+  width: 230px;
 `
 const Error = styled.div`
   color: red;
+`
+const FixedEmail = styled.div`
+  align-self: flex-start;
+  color: rgb(110, 110, 110);
+  font-size: 20px;
+  height: 46px;
+  margin: 20px 0px 10px 0px;
+  width: 50vw;
 `
 const Form = styled.div`
   align-items: center;
@@ -173,7 +203,7 @@ const Input = styled.input`
 const Label = styled.div`
   align-self: flex-start;
 `
-const LabelBox = styled.div`
+const LabelBoxAndNames = styled.div`
   display: flex;
   justify-content: space-between;
   width: 50vw;
@@ -188,34 +218,9 @@ const NameInput = styled.input`
   padding-left: 20px;
   width: 24vw;
 `
-const Names = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 50vw;
-`
-const Submit = styled.button`
-  background: linear-gradient(180deg, #303AE4 0%, #050BC4 100%);
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-  height: 50px;
-  width: 120px;
-  &:hover{
-    background: #303AE4
-  }
-  &:focus{
-    outline: none;
-  }
-  &:active{
-    background: #050BC4;
-  }
-`
 const Title = styled.div`
   font-size: 26px;
   margin-bottom: 30px;
 `
 
-export default CreatePage;
+export default FormPage;

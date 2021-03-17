@@ -17,7 +17,7 @@ const contacts = [
   {
     first: 'Chick',
     last: 'Corea',
-    phone: '(111) 222-333',
+    phone: '(111) 222-3333',
     email: 'ccorea@gmail.com'
   },
   {
@@ -52,7 +52,7 @@ const contacts = [
   },
 ];
 
-seed = async () => {
+seed = () => {
   for (let i = 0; i < contacts.length; i++) {
     const post = new ContactModel({
       first: contacts[i].first,
@@ -64,11 +64,10 @@ seed = async () => {
       if (err) {
         console.log('failed to add to db');
       } else {
-        console.log('added to db');
+        console.log(`${contacts[i].first} ${contacts[i].last} added to db`);
       }
     })
   }
-  console.log('Seeded Database!')
 };
 
 seed();
