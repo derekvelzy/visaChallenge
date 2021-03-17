@@ -1,4 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export const flexBetween = css`
+  display: flex;
+  justify-content: space-between;
+`
 
 export const Container = styled.div`
   margin-left: 5vw;

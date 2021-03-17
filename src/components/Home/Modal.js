@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setModal } from '../../redux/modal.js';
 import { setContacts } from '../../redux/contacts.js';
-import { BlueButton, YellowButton } from '../globalComponents.js';
+import { flexBetween, BlueButton, YellowButton } from '../globalComponents.js';
 
 const Modal = () => {
   const { open, name, email } = useSelector(state => state.modal);
   const dispatch = useDispatch();
 
   const deleteContact = () => {
-    axios.delete('http://localhost:8000/delete', { data: {email} })
+    axios.delete(`${window.location.origin}/delete`, { data: {email} })
     .then(() => {
-      axios.get('http://localhost:8000/get')
+      axios.get(`${window.location.origin}/get`)
       .then((res) => {
         dispatch(setContacts(res.data));
         dispatch(setModal(''));
@@ -25,19 +25,15 @@ const Modal = () => {
   };
 
   const contentProps = useSpring({
-    to: { marginBottom: open ? '0px' : '-100px' },
-    from: {},
+    marginBottom: open ? '0px' : '-100px',
     config: { mass: 1, tension: 230, friction: 20 }
   });
 
   const modProps = useSpring({
-    to: {
-      opacity: open ? '1' : '0',
-      display: open ? 'flex' : 'none'
-    },
-    from: {},
+    opacity: open ? '1' : '0',
+    display: open ? 'flex' : 'none',
     config: { mass: 1, tension: 180, friction: 20 }
-  })
+  });
 
   return (
     <Mod style={modProps}>
@@ -57,22 +53,20 @@ const Modal = () => {
 };
 
 const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
+  ${flexBetween};
   width: 230px;
 `
 const ConfirmText = styled.div`
   font-size: 20px;
-  textAlign: center;
+  text-align: center;
 `
 const Content = styled(animated.div)`
+  ${flexBetween};
   align-items: center;
   background: white;
   border-radius: 8px;
-  display: flex;
   flex-direction: column;
   height: 110px;
-  justify-content: space-between;
   margin-bottom: -100px;
   padding: 30px 20px 30px 20px;
   width: 500px;

@@ -14,7 +14,7 @@ export const editSlice = createSlice({
       state.id = action.payload.id;
       state.editFirst = action.payload.first;
       state.editLast = action.payload.last;
-      state.editPhone = action.payload.phone;
+      state.editPhone = action.payload.number;
       state.editEmail = action.payload.email;
     },
   }

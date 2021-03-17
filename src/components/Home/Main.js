@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import Header from '../Header.js';
-import Create from './Create.js';
 import Contact from './Contact.js';
-import Modal from './Modal.js';
+import Create from './Create.js';
+import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
 import { Container } from '../globalComponents.js';
 
@@ -14,16 +13,12 @@ const Main = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getContacts();
-  }, []);
-
-  const getContacts = () => {
-    axios.get('http://localhost:8000/get')
+    axios.get(`${window.location.origin}/get`)
     .then((res) => {
       dispatch(setContacts(res.data));
     })
     .catch((e) => { alert('Error getting contacts', e) });
-  }
+  }, []);
 
   return (
     <Container>

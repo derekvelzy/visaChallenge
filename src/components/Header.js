@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import { useSelector } from 'react-redux';
-import { Link } from "react-router-dom";
 import Modal from './Home/Modal.js'
 
 const Header = () => {

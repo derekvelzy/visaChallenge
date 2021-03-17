@@ -6,8 +6,8 @@ import FormPage from './FormPage/FormPage.js';
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/" exact component={Main} />
-      <Route path="/create" component={FormPage} />
+      <Route path='/' exact component={Main} />
+      <Route path='/create' component={FormPage} />
       <Route path='/edit' component={FormPage} />
     </Switch>
   </BrowserRouter>

@@ -1,24 +1,13 @@
 import React from 'react';
 import styled from 'styled-components'
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-const Create = () => {
+const Create = () => (
+  <Link to='/create'>
+    <CreateButton className="fontMed">Create New Contact +</CreateButton>
+  </Link>
+);
 
-  return (
-    <Container>
-      <Link to="/create">
-        <CreateButton className="fontMed">Create New Contact +</CreateButton>
-      </Link>
-    </Container>
-  )
-};
-
-const Container = styled.div`
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  width: 90vw;
-`
 const CreateButton = styled.button`
   background: linear-gradient(180deg, #303AE4 0%, #050BC4 100%);
   border: 0;
@@ -28,6 +17,7 @@ const CreateButton = styled.button`
   cursor: pointer;
   font-size: 20px;
   height: 50px;
+  margin-top: 30px;
   transition: all 0.2s ease;
   width: 40vw;
   &:hover {

@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
-import { Container, BlueButton, YellowButton } from '../globalComponents.js';
+import { Container, flexBetween, BlueButton, YellowButton } from '../globalComponents.js';
 
 const FormPage = () => {
   const history = useHistory();
@@ -76,18 +76,18 @@ const FormPage = () => {
     if (!phoneex) setPhoneErr(true);
     if (!emailex) setEmailErr(true);
     if (window.location.pathname === '/edit' && firstex && lastex && phoneex && emailex) {
-      axios.patch('http://localhost:8000/patch', { data: {id, first, last, phone, email }})
+      axios.patch(`${window.location.origin}/patch`, { data: {id, first, last, phone, email }})
       .then(() => { resetData() })
       .catch((e) => alert('Error updating user', e));
     } else if (window.location.pathname === '/create' && firstex && lastex && phoneex && emailex) {
-      axios.post('http://localhost:8000/post', { data: {first, last, phone, email} })
+      axios.post(`${window.location.origin}/post`, { data: {first, last, phone, email} })
       .then(() => { resetData() })
       .catch((e) => alert('Error adding user', e));
     }
   };
 
   const resetData = () => {
-    axios.get('http://localhost:8000/get')
+    axios.get(`${window.location.origin}/get`)
       .then((res) => {
         dispatch(setContacts(res.data));
         history.push('/');
@@ -99,65 +99,67 @@ const FormPage = () => {
     <Container>
       <Header />
       <Form>
-        <Title className="fontMed">
+        <Title className='fontMed'>
           {window.location.pathname === '/edit' ? 'Edit Contact' : 'Create New Contact'}
         </Title>
         <LabelBoxAndNames>
           <div>
             <LabelBoxAndNames style={{ width: '24vw'}}>
-              <Label className="fontReg">First</Label>
-              <Error className="fontReg" style={firstErr ? {display: 'flex'} : {display: 'none'}}>
-                Please enter first name
+              <Label className='fontReg'>First</Label>
+              <Error className='fontReg' style={firstErr ? {display: 'flex'} : {display: 'none'}}>
+                Must enter first name
               </Error>
             </LabelBoxAndNames>
-            <NameInput
-              placeholder="jane"
+            <Input
+              placeholder='Jane'
               value={first}
               onChange={(e) => setFirst(e.target.value)}
+              style={{width: '24vw'}}
             />
           </div>
           <div>
             <LabelBoxAndNames  style={{ width: '24vw'}}>
-              <Label className="fontReg">Last</Label>
-              <Error className="fontReg" style={lastErr ? {display: 'flex'} : {display: 'none'}}>
-                Please enter last name
+              <Label className='fontReg'>Last</Label>
+              <Error className='fontReg' style={lastErr ? {display: 'flex'} : {display: 'none'}}>
+                Must enter last name
               </Error>
             </LabelBoxAndNames>
-            <NameInput
-              placeholder="doe"
+            <Input
+              placeholder='Doe'
               value={last}
               onChange={(e) => setLast(e.target.value)}
+              style={{width: '24vw'}}
             />
           </div>
         </LabelBoxAndNames>
         <LabelBoxAndNames>
-          <Label className="fontReg">Phone</Label>
-          <Error className="fontReg" style={phoneErr ? {display: 'flex'} : {display: 'none'}}>
+          <Label className='fontReg'>Phone</Label>
+          <Error className='fontReg' style={phoneErr ? {display: 'flex'} : {display: 'none'}}>
             Must be valid phone number
           </Error>
         </LabelBoxAndNames>
         <Input
-          placeholder="(xxx) xxx-xxxx"
+          placeholder='(xxx) xxx-xxxx'
           value={phone}
           onChange={(e) => phoneCheck(e.target.value)}
         />
         <LabelBoxAndNames>
-          <Label className="fontReg">Email</Label>
-          <Error className="fontReg" style={emailErr ? {display: 'flex'} : {display: 'none'}}>
+          <Label className='fontReg'>Email</Label>
+          <Error className='fontReg' style={emailErr ? {display: 'flex'} : {display: 'none'}}>
             Must be valid email
           </Error>
         </LabelBoxAndNames>
         <Input
-          placeholder="janedoe@domain.com"
+          placeholder='janedoe@domain.com'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Buttons>
-          <BlueButton className="fontMed" onClick={submit}>
+          <BlueButton className='fontMed' onClick={submit}>
             {window.location.pathname === '/edit' ? 'Save' : 'Submit'}
           </BlueButton>
-          <Link to="/" style={{textDecoration: 'none'}}>
-            <YellowButton className="fontMed">Cancel</YellowButton>
+          <Link to='/' style={{textDecoration: 'none'}}>
+            <YellowButton className='fontMed'>Cancel</YellowButton>
           </Link>
         </Buttons>
       </Form>
@@ -166,8 +168,7 @@ const FormPage = () => {
 };
 
 const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
+  ${flexBetween};
   margin-top: 20px;
   width: 230px;
 `
@@ -204,19 +205,8 @@ const Label = styled.div`
   align-self: flex-start;
 `
 const LabelBoxAndNames = styled.div`
-  display: flex;
-  justify-content: space-between;
+  ${flexBetween};
   width: 50vw;
-`
-const NameInput = styled.input`
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
-  font-size: 18px;
-  height: 46px;
-  margin: 10px 0px 20px 0px;
-  padding-left: 20px;
-  width: 24vw;
 `
 const Title = styled.div`
   font-size: 26px;
