@@ -17,8 +17,8 @@ const CreateButton = styled.button`
   cursor: pointer;
   font-size: 20px;
   height: 50px;
+  margin-left: 5vw;
   margin-top: 30px;
-  transition: all 0.2s ease;
   width: 40vw;
   &:hover {
     background: linear-gradient(180deg, #303AE4 0%, #303AE4 100%);
@@ -30,6 +30,10 @@ const CreateButton = styled.button`
   }
   &:focus {
     outline: none;
+  }
+  @media (max-width: 900px) {
+    margin-left: 0vw;
+    width: 80vw;
   }
 `
 

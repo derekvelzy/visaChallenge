@@ -15,30 +15,34 @@ const Header = () => {
   }, [open]);
 
   return (
-    <Margins>
+    <div>
       <Modal />
       <Container>
         <Title className="fontBold">Visa Contact List</Title>
       </Container>
-    </Margins>
+    </div>
   )
 };
 
 const Container = styled.div`
+  align-items: center;
   background: linear-gradient(90.13deg, #2831FF 28.2%, #2831FF 28.21%, #0208A6 99.99%, #0006A2 99.99%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 100vw;
-  height: 60px;
   display: flex;
-  align-items: center;
-`
-const Margins = styled.div`
-  margin-left: -5vw;
+  height: 60px;
+  justify-content: flex-start;
+  width: 100vw;
+  @media (max-width: 900px) {
+    justify-content: center;
+  }
 `
 const Title = styled.div`
   color: white;
   font-size: 28px;
   margin-left: 5vw;
+  @media (max-width: 900px) {
+    margin-left: 0vw;
+  }
 `
 
 export default Header;

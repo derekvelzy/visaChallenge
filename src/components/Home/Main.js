@@ -6,11 +6,29 @@ import Contact from './Contact.js';
 import Create from './Create.js';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
+import { setDisplay } from '../../redux/display.js';
 import { Container } from '../globalComponents.js';
 
 const Main = () => {
   const { contacts } = useSelector(state => state.contact);
   const dispatch = useDispatch();
+
+  const displayWindowSize = () => {
+    var w = document.documentElement.clientWidth;
+    if (w <= 900) {
+      dispatch(setDisplay('mobile'));
+    } else {
+      dispatch(setDisplay('desktop'));
+    }
+  }
+
+  useEffect(() => {
+    displayWindowSize();
+    window.addEventListener("resize", displayWindowSize);
+    return () => {
+      window.removeEventListener("resize", displayWindowSize);
+    }
+  }, [])
 
   useEffect(() => {
     axios.get(`${window.location.origin}/get`)
@@ -34,7 +52,16 @@ const Main = () => {
 };
 
 const Contacts = styled.div`
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
   padding-bottom: 200px;
+  margin-left: 5vw;
+  width: 100vw;
+  @media (max-width: 900px) {
+    align-items: center;
+    margin-left: 0vw;
+  }
 `
 
 export default Main;

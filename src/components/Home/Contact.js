@@ -12,6 +12,7 @@ import { BlueButton, YellowButton } from '../globalComponents.js';
 
 const Contact = ({ id, first, last, number, email }) => {
   const { selectedEmail, lastEmail } = useSelector(state => state.card);
+  const { display } = useSelector(state => state.display);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -22,6 +23,7 @@ const Contact = ({ id, first, last, number, email }) => {
 
   const seCondition = selectedEmail === email;
   const leCondition = lastEmail === email;
+  const dispCondition = display === 'desktop';
 
   const openProps = useSpring({
     to: [
@@ -54,12 +56,21 @@ const Contact = ({ id, first, last, number, email }) => {
     config: { mass: 1, tension: 230, friction: 20 }
   });
 
+  const openMobileProps = useSpring({
+    height: seCondition ? '340px' : '80px',
+    flexDirection: seCondition ? 'column' : 'row',
+    justifyContent: seCondition ? 'center' : 'flex-start',
+    ursor: seCondition ? 'auto' : 'pointer',
+    from: {...containerStyle, width: '80vw'},
+    config: { mass: 1, tension: 230, friction: 20 }
+  })
+
   const picProps = useSpring({
     to: [
-      { height: '49.5px', width: '49.5px'},
+      { height: (dispCondition ? '49.5px' : '50px'), width: (dispCondition ? '49.5px' : '50px')},
       {
-        height: seCondition ? '120px' : '50px',
-        width: seCondition ? '120px' : '50px',
+        height: seCondition ? (dispCondition ? '120px' : '100px') : '50px',
+        width: seCondition ? (dispCondition ? '120px' : '100px') : '50px',
         margin: seCondition ? '20px 30px 20px 30px' : '0px 30px 0px 30px',
       },
     ],
@@ -69,39 +80,44 @@ const Contact = ({ id, first, last, number, email }) => {
 
   const infoProps = useSpring({
     alignItems: seCondition ? 'center' : 'flex-start',
+    justifyContent: seCondition ? 'flex-start' : 'flex-start',
     from: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start' },
     delay: 100
   });
 
   const nameProps = useSpring({
-    marginBottom: seCondition ? '20px' : '8px',
-    fontSize: seCondition ? '28px' : '20px',
+    marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '8px',
+    fontSize: seCondition ? (dispCondition ? '28px' : '24px') : '20px',
     from: { fontSize: '20px', marginBottom: '8px' },
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: leCondition ? 0 : 600
+    delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });
 
   const numProps = useSpring({
     fontSize: seCondition ? '22px' : '16px',
-    marginBottom: seCondition ? '20px' : '0px',
+    marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '0px',
     from: { fontSize: '16px' },
     config: { mass: 1, tension: 250, friction: 20 },
-    delay: leCondition ? 0 : 600
+    delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });
 
   const visProps = useSpring({
     display: seCondition ? 'flex' : 'none',
     from: { display: 'none' },
-    delay: leCondition ? 0 : 700
+    delay: leCondition ? 0 : (dispCondition ? 700 : 100)
   });
 
   return (
     <animated.div
       onClick={() => { if (selectedEmail !== email) dispatch(setCard(email)) }}
-      style={openProps}
+      style={display === 'desktop' ? {...openProps} : {...openMobileProps}}
       className='card'
     >
-      <animated.div style={{...visProps, ...iconStyle}}>
+      <animated.div style={{
+        ...visProps,
+        ...iconStyle,
+        marginTop: dispCondition ? '15px' : '-10px'
+        }}>
         <FontAwesomeIcon
           onClick={() => { if (selectedEmail === email) dispatch(setCard('')) }}
           icon={faTimesCircle}
@@ -112,17 +128,23 @@ const Contact = ({ id, first, last, number, email }) => {
       <animated.div style={infoProps}>
         <animated.div style={nameProps} className='fontMed'>{first} {last}</animated.div>
         <animated.div style={numProps} className='fontReg'>{number}</animated.div>
-        <animated.div style={visProps} className='fontReg'>{email}</animated.div>
-        <animated.div style={visProps}>
-          <BlueButton onClick={editContact} style={{ margin: '40px 0px 20px 0px' }}>
-            Edit
-          </BlueButton>
-        </animated.div>
-        <animated.div style={visProps}>
-          <YellowButton onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}>
-            Delete
-          </YellowButton>
-        </animated.div>
+        <animated.div
+          style={{...visProps, marginBottom: dispCondition ? '0px' : '20px'}}
+          className='fontReg'>
+            {email}
+          </animated.div>
+        <Buttons>
+          <animated.div style={visProps}>
+            <BlueButton onClick={editContact} style={dispCondition ? { margin: '40px 0px 20px 0px'} : {}}>
+              Edit
+            </BlueButton>
+          </animated.div>
+          <animated.div style={visProps}>
+            <YellowButton onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}>
+              Delete
+            </YellowButton>
+          </animated.div>
+        </Buttons>
       </animated.div>
     </animated.div>
   )
@@ -136,15 +158,12 @@ const containerStyle = {
   display: 'flex',
   height: '80px',
   marginLeft: '0vw',
-  marginRight: '60px',
   marginTop: '35px',
   width: '40vw',
-  zIndex: 0,
 };
 const iconStyle = {
   alignSelf: 'flex-end',
   marginRight: '15px',
-  marginTop: '15px'
 };
 const picStyle = {
   background: 'rgb(200, 200, 200)',
@@ -153,5 +172,17 @@ const picStyle = {
   margin: '0px 30px 0px 30px',
   width: '50px',
 };
+
+const Buttons = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 0px;
+  @media (max-width: 900px) {
+    flex-direction: row;
+    width: 220px;
+  }
+`
 
 export default Contact;

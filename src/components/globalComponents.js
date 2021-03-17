@@ -6,8 +6,13 @@ export const flexBetween = css`
 `
 
 export const Container = styled.div`
-  margin-left: 5vw;
-  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100vw;
+  @media (max-width: 900px) {
+    align-items: center;
+  }
 `
 export const BlueButton = styled.button`
   background: linear-gradient(180deg, #303AE4 0%, #050BC4 100%);
