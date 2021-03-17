@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
+import { boxStyling } from '../globalComponents.js';
 
 const Create = () => (
   <Link to='/create'>
@@ -9,10 +10,8 @@ const Create = () => (
 );
 
 const CreateButton = styled.button`
+  ${boxStyling};
   background: linear-gradient(180deg, #303AE4 0%, #050BC4 100%);
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
   color: white;
   cursor: pointer;
   font-size: 20px;
@@ -31,7 +30,7 @@ const CreateButton = styled.button`
   &:focus {
     outline: none;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     margin-left: 0vw;
     width: 80vw;
   }

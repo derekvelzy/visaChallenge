@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setModal } from '../../redux/modal.js';
 import { setContacts } from '../../redux/contacts.js';
-import { flexBetween, BlueButton, YellowButton } from '../globalComponents.js';
+import { flexBetween, BlueBtn, YellowBtn } from '../globalComponents.js';
 
 const Modal = () => {
   const { open, name, email } = useSelector(state => state.modal);
@@ -40,12 +40,12 @@ const Modal = () => {
       <Content style={contentProps}>
         <ConfirmText className="fontMed">Are you sure you want to delete {name}?</ConfirmText>
         <Buttons>
-          <BlueButton className="fontMed" onClick={() => deleteContact()}>
+          <BlueBtn className="fontMed" onClick={() => deleteContact()}>
             Yes
-          </BlueButton>
-          <YellowButton className="fontMed" onClick={() => dispatch(setModal(''))}>
+          </BlueBtn>
+          <YellowBtn className="fontMed" onClick={() => dispatch(setModal(''))}>
             Close
-          </YellowButton>
+          </YellowBtn>
         </Buttons>
       </Content>
     </Mod>
@@ -59,6 +59,9 @@ const Buttons = styled.div`
 const ConfirmText = styled.div`
   font-size: 20px;
   text-align: center;
+  @media (max-width: 1000px) {
+    font-soze: 12px;
+  }
 `
 const Content = styled(animated.div)`
   ${flexBetween};
@@ -70,6 +73,10 @@ const Content = styled(animated.div)`
   margin-bottom: -100px;
   padding: 30px 20px 30px 20px;
   width: 500px;
+  @media (max-width: 1000px) {
+    height: 150px;
+    width: 300px;
+  }
 `
 const Mod = styled(animated.div)`
   background: rgba(0, 0, 0, 0.4);

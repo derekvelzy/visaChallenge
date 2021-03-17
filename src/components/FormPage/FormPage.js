@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
-import { Container, flexBetween, BlueButton, YellowButton } from '../globalComponents.js';
+import { inputs, Container, flexBetween, long, short, BlueBtn, YellowBtn } from '../globalComponents.js';
 
 const FormPage = () => {
-  const history = useHistory();
   const { id, editFirst, editLast, editPhone, editEmail } = useSelector(state => state.edit);
   const dispatch = useDispatch();
+  const history = useHistory();
 
+  const [statics, setStatics] = useState(['Create New Contact', 'Submit']);
   const [first, setFirst] = useState('');
   const [last, setLast] = useState('');
   const [phone, setPhone] = useState('');
@@ -25,6 +26,7 @@ const FormPage = () => {
     if (!id && window.location.pathname === '/edit') {
       history.push('/');
     } else if (window.location.pathname === '/edit') {
+      setStatics(['Edit Contact', 'Save']);
       setFirst(editFirst);
       setLast(editLast);
       setPhone(editPhone);
@@ -61,12 +63,6 @@ const FormPage = () => {
     setLastErr(false);
     setPhoneErr(false);
     setEmailErr(false);
-    // REGEX:
-      // \w Starts with a word
-      // @ followed by an @ character
-      // Followed by another word
-      // Followed by a valid domain
-      // $ End expression right after the domain
     const emailex = /\w+@+\w+\.+(com|net|org|gov|edu)$/.test(email);
     const firstex = /^\w{1,}$/.test(first);
     const lastex = /^\w{1,}$/.test(last);
@@ -76,11 +72,11 @@ const FormPage = () => {
     if (!phoneex) setPhoneErr(true);
     if (!emailex) setEmailErr(true);
     if (window.location.pathname === '/edit' && firstex && lastex && phoneex && emailex) {
-      axios.patch(`${window.location.origin}/patch`, { data: {id, first, last, phone, email }})
+      axios.patch(`${window.location.origin}/patch`, { data: {id, first, last, phone, email } })
       .then(() => { resetData() })
       .catch((e) => alert('Error updating user', e));
     } else if (window.location.pathname === '/create' && firstex && lastex && phoneex && emailex) {
-      axios.post(`${window.location.origin}/post`, { data: {first, last, phone, email} })
+      axios.post(`${window.location.origin}/post`, { data: {first, last, phone, email } })
       .then(() => { resetData() })
       .catch((e) => alert('Error adding user', e));
     }
@@ -93,73 +89,67 @@ const FormPage = () => {
         history.push('/');
       })
       .catch((e) => alert('Error getting contacts', e));
-  }
+  };
 
   return (
     <Container>
       <Header />
       <Form>
-        <Title className='fontMed'>
-          {window.location.pathname === '/edit' ? 'Edit Contact' : 'Create New Contact'}
-        </Title>
-        <LabelBoxAndNames>
+        <Title className='fontMed'>{statics[0]}</Title>
+        <LongBox>
           <div>
-            <LabelBoxAndNames style={{ width: '24vw'}}>
-              <Label className='fontReg'>First</Label>
-              <Error className='fontReg' style={firstErr ? {display: 'flex'} : {display: 'none'}}>
+            <ShortBox>
+              <div className='fontReg'>First</div>
+              <Error className='fontReg' style={{display: firstErr ? 'flex' :  'none'}}>
                 Must enter first name
               </Error>
-            </LabelBoxAndNames>
-            <Input
+            </ShortBox>
+            <NameInput
               placeholder='Jane'
               value={first}
               onChange={(e) => setFirst(e.target.value)}
-              style={{width: '24vw'}}
             />
           </div>
           <div>
-            <LabelBoxAndNames  style={{ width: '24vw'}}>
-              <Label className='fontReg'>Last</Label>
-              <Error className='fontReg' style={lastErr ? {display: 'flex'} : {display: 'none'}}>
+            <ShortBox>
+              <div className='fontReg'>Last</div>
+              <Error className='fontReg' style={{display: lastErr ? 'flex' : 'none'}}>
                 Must enter last name
               </Error>
-            </LabelBoxAndNames>
-            <Input
+            </ShortBox>
+            <NameInput
               placeholder='Doe'
               value={last}
               onChange={(e) => setLast(e.target.value)}
-              style={{width: '24vw'}}
             />
           </div>
-        </LabelBoxAndNames>
-        <LabelBoxAndNames>
-          <Label className='fontReg'>Phone</Label>
-          <Error className='fontReg' style={phoneErr ? {display: 'flex'} : {display: 'none'}}>
+        </LongBox>
+        <LongBox>
+          <div className='fontReg'>Phone</div>
+          <Error className='fontReg' style={{display: phoneErr ? 'flex' : 'none'}}>
             Must be valid phone number
           </Error>
-        </LabelBoxAndNames>
+        </LongBox>
         <Input
           placeholder='(xxx) xxx-xxxx'
           value={phone}
           onChange={(e) => phoneCheck(e.target.value)}
         />
-        <LabelBoxAndNames>
-          <Label className='fontReg'>Email</Label>
-          <Error className='fontReg' style={emailErr ? {display: 'flex'} : {display: 'none'}}>
+        <LongBox>
+          <div className='fontReg'>Email</div>
+          <Error className='fontReg' style={{display: emailErr ? 'flex' : 'none'}}>
             Must be valid email
           </Error>
-        </LabelBoxAndNames>
+        </LongBox>
         <Input
           placeholder='janedoe@domain.com'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Buttons>
-          <BlueButton className='fontMed' onClick={submit}>
-            {window.location.pathname === '/edit' ? 'Save' : 'Submit'}
-          </BlueButton>
+          <BlueBtn className='fontMed' onClick={submit}>{statics[1]}</BlueBtn>
           <Link to='/' style={{textDecoration: 'none'}}>
-            <YellowButton className='fontMed'>Cancel</YellowButton>
+            <YellowBtn className='fontMed'>Cancel</YellowBtn>
           </Link>
         </Buttons>
       </Form>
@@ -174,39 +164,34 @@ const Buttons = styled.div`
 `
 const Error = styled.div`
   color: red;
-`
-const FixedEmail = styled.div`
-  align-self: flex-start;
-  color: rgb(110, 110, 110);
-  font-size: 20px;
-  height: 46px;
-  margin: 20px 0px 10px 0px;
-  width: 50vw;
+  font-size: 14px;
+  @media (max-width: 1000px) {
+    font-size: 10px;
+  }
 `
 const Form = styled.div`
+  ${long};
   align-items: center;
+  align-self: center;
   display: flex;
   flex-direction: column;
-  margin-left: 20vw;
   margin-top: 40px;
-  width: 50vw;
 `
 const Input = styled.input`
-  border: 0;
-  border-radius: 5px;
-  box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
-  font-size: 18px;
-  height: 46px;
-  margin: 10px 0px 30px 0px;
-  padding-left: 20px;
-  width: 50vw;
+  ${inputs};
+  ${long};
 `
-const Label = styled.div`
-  align-self: flex-start;
-`
-const LabelBoxAndNames = styled.div`
+const LongBox = styled.div`
   ${flexBetween};
-  width: 50vw;
+  ${long};
+`
+const NameInput = styled.input`
+  ${inputs};
+  ${short};
+`
+const ShortBox = styled.div`
+  ${flexBetween};
+  ${short};
 `
 const Title = styled.div`
   font-size: 26px;

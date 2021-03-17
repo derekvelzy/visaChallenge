@@ -14,8 +14,7 @@ const Main = () => {
   const dispatch = useDispatch();
 
   const displayWindowSize = () => {
-    var w = document.documentElement.clientWidth;
-    if (w <= 900) {
+    if (document.body.clientWidth <= 1000) {
       dispatch(setDisplay('mobile'));
     } else {
       dispatch(setDisplay('desktop'));
@@ -58,7 +57,7 @@ const Contacts = styled.div`
   padding-bottom: 200px;
   margin-left: 5vw;
   width: 100vw;
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     align-items: center;
     margin-left: 0vw;
   }

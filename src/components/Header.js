@@ -32,7 +32,7 @@ const Container = styled.div`
   height: 60px;
   justify-content: flex-start;
   width: 100vw;
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     justify-content: center;
   }
 `
@@ -40,7 +40,7 @@ const Title = styled.div`
   color: white;
   font-size: 28px;
   margin-left: 5vw;
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     margin-left: 0vw;
   }
 `

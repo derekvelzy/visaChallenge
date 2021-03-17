@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { setCard } from '../../redux/card.js';
 import { setModal } from '../../redux/modal.js';
 import { setContact } from '../../redux/edits.js';
-import { BlueButton, YellowButton } from '../globalComponents.js';
+import { BlueBtn, YellowBtn } from '../globalComponents.js';
 
 const Contact = ({ id, first, last, number, email }) => {
   const { selectedEmail, lastEmail } = useSelector(state => state.card);
@@ -81,13 +81,14 @@ const Contact = ({ id, first, last, number, email }) => {
   const infoProps = useSpring({
     alignItems: seCondition ? 'center' : 'flex-start',
     justifyContent: seCondition ? 'flex-start' : 'flex-start',
-    from: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start' },
+    from: {...infoStyle, width: (dispCondition ? '28vw' : '40vw')
+    },
     delay: 100
   });
 
   const nameProps = useSpring({
     marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '8px',
-    fontSize: seCondition ? (dispCondition ? '28px' : '24px') : '20px',
+    fontSize: seCondition ? (dispCondition ? '28px' : '22px') : (dispCondition ? '20px' : '16px'),
     from: { fontSize: '20px', marginBottom: '8px' },
     config: { mass: 1, tension: 250, friction: 20 },
     delay: leCondition ? 0 : (dispCondition ? 600 : 100)
@@ -96,7 +97,7 @@ const Contact = ({ id, first, last, number, email }) => {
   const numProps = useSpring({
     fontSize: seCondition ? '22px' : '16px',
     marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '0px',
-    from: { fontSize: '16px' },
+    from: { fontSize: dispCondition ? '16px' : '14px' },
     config: { mass: 1, tension: 250, friction: 20 },
     delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });
@@ -135,14 +136,14 @@ const Contact = ({ id, first, last, number, email }) => {
           </animated.div>
         <Buttons>
           <animated.div style={visProps}>
-            <BlueButton onClick={editContact} style={dispCondition ? { margin: '40px 0px 20px 0px'} : {}}>
+            <BlueBtn onClick={editContact} style={dispCondition ? { margin: '40px 0px 20px 0px'} : {}}>
               Edit
-            </BlueButton>
+            </BlueBtn>
           </animated.div>
           <animated.div style={visProps}>
-            <YellowButton onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}>
+            <YellowBtn onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}>
               Delete
-            </YellowButton>
+            </YellowBtn>
           </animated.div>
         </Buttons>
       </animated.div>
@@ -165,6 +166,12 @@ const iconStyle = {
   alignSelf: 'flex-end',
   marginRight: '15px',
 };
+const infoStyle = {
+  alignItems: 'flex-start',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+}
 const picStyle = {
   background: 'rgb(200, 200, 200)',
   borderRadius: '50%',
@@ -179,7 +186,7 @@ const Buttons = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: 0px;
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     flex-direction: row;
     width: 220px;
   }
