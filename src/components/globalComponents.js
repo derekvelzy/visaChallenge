@@ -21,7 +21,7 @@ export const inputs = css`
   font-size: 18px;
   height: 46px;
   margin: 10px 0px 30px 0px;
-  padding-left: 20px;
+  text-align: center;
 `
 export const long = css`
   width: 50vw;
@@ -30,9 +30,9 @@ export const long = css`
   }
 `
 export const short = css`
-  width: 24vw;
+  width: 23vw;
   @media (max-width: 1000px) {
-    width: 38vw;
+    width: 37vw;
   }
 `
 

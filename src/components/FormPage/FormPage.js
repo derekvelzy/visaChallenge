@@ -5,7 +5,9 @@ import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
-import { inputs, Container, flexBetween, long, short, BlueBtn, YellowBtn } from '../globalComponents.js';
+import {
+  inputs, Container, flexBetween, long, short, BlueBtn, YellowBtn
+} from '../globalComponents.js';
 
 const FormPage = () => {
   const { id, editFirst, editLast, editPhone, editEmail } = useSelector(state => state.edit);
@@ -96,7 +98,7 @@ const FormPage = () => {
       <Header />
       <Form>
         <Title className='fontMed'>{statics[0]}</Title>
-        <LongBox>
+        <LongBox style={{justifyContent: 'space-between'}}>
           <div>
             <ShortBox>
               <div className='fontReg'>First</div>
@@ -110,7 +112,7 @@ const FormPage = () => {
               onChange={(e) => setFirst(e.target.value)}
             />
           </div>
-          <div>
+          <div >
             <ShortBox>
               <div className='fontReg'>Last</div>
               <Error className='fontReg' style={{display: lastErr ? 'flex' : 'none'}}>

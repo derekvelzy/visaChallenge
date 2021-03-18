@@ -63,7 +63,7 @@ const Contact = ({ id, first, last, number, email }) => {
     ursor: seCondition ? 'auto' : 'pointer',
     from: {...containerStyle, width: '80vw'},
     config: { mass: 1, tension: 230, friction: 20 }
-  })
+  });
 
   const picProps = useSpring({
     to: [
@@ -81,7 +81,7 @@ const Contact = ({ id, first, last, number, email }) => {
   const infoProps = useSpring({
     alignItems: seCondition ? 'center' : 'flex-start',
     justifyContent: seCondition ? 'flex-start' : 'flex-start',
-    from: {...infoStyle, width: (dispCondition ? '28vw' : '40vw')
+    from: {...infoStyle, width: (dispCondition ? '28vw' : '38vw')
     },
     delay: 100
   });
@@ -152,8 +152,8 @@ const Contact = ({ id, first, last, number, email }) => {
 };
 
 const containerStyle = {
-  cursor: 'pointer',
   alignItems: 'center',
+  cursor: 'pointer',
   background: 'white',
   borderRadius: '5px',
   display: 'flex',
@@ -171,7 +171,7 @@ const infoStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-}
+};
 const picStyle = {
   background: 'rgb(200, 200, 200)',
   borderRadius: '50%',

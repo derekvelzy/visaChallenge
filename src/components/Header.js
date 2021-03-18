@@ -36,7 +36,7 @@ const Container = styled.div`
     justify-content: center;
   }
 `
-const Title = styled.div`
+const Title = styled.h1`
   color: white;
   font-size: 28px;
   margin-left: 5vw;
