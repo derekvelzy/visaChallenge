@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import Modal from './Home/Modal.js'
+import Modal from './Home/Modal.js';
 
 const Header = () => {
   const { open } = useSelector(state => state.modal);

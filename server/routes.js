@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const model = require('../db/model.js');
 
-// routes
 router.get('/get', (req, res) => {
   model.get((err, results) => {
     if (err) {

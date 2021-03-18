@@ -1,7 +1,6 @@
 const db = require('./mongo.js');
 const ContactModel = require('./schema.js');
 
-
 module.exports = {
   delete: async (data, callback) => {
     try {
@@ -44,7 +43,6 @@ module.exports = {
 
   patch: async (body, callback) => {
     try {
-      console.log(body.data);
       const x = await ContactModel.findOneAndUpdate(
         {_id: body.data.id},
         {

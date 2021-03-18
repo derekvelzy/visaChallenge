@@ -20,11 +20,11 @@ const CreateButton = styled.button`
   margin-top: 30px;
   width: 40vw;
   &:hover {
-    background: linear-gradient(180deg, #303AE4 0%, #303AE4 100%);
+    background: #303AE4;
     box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.4);
   }
   &:active {
-    background: linear-gradient(180deg, #050BC4 0%, #050BC4 100%);
+    background: #050BC4;
     box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.5);
   }
   &:focus {
