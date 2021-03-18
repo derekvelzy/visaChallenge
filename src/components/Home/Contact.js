@@ -88,16 +88,16 @@ const Contact = ({ id, first, last, number, email }) => {
 
   const nameProps = useSpring({
     marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '8px',
-    fontSize: seCondition ? (dispCondition ? '28px' : '22px') : (dispCondition ? '20px' : '16px'),
+    fontSize: seCondition ? (dispCondition ? '28px' : '20px') : (dispCondition ? '20px' : '16px'),
     from: { fontSize: '20px', marginBottom: '8px' },
     config: { mass: 1, tension: 250, friction: 20 },
     delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });
 
   const numProps = useSpring({
-    fontSize: seCondition ? '22px' : '16px',
+    fontSize: seCondition ? (dispCondition ? '22px' : '18px') : (dispCondition ? '16px' : '14px'),
     marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '0px',
-    from: { fontSize: dispCondition ? '16px' : '14px' },
+    from: { fontSize: dispCondition ? '16px' : '12px' },
     config: { mass: 1, tension: 250, friction: 20 },
     delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });

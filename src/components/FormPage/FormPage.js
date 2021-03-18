@@ -95,7 +95,7 @@ const FormPage = () => {
       <Header />
       <Form>
         <Title className='fontMed'>{statics[0]}</Title>
-        <LongBox style={{justifyContent: 'space-between'}}>
+        <LongBox>
           <div>
             <ShortBox>
               <div className='fontReg'>First</div>

@@ -13,7 +13,7 @@ const Main = () => {
   const { contacts } = useSelector(state => state.contact);
   const dispatch = useDispatch();
 
-  const displayWindowSize = () => {
+  const windowSize = () => {
     if (document.body.clientWidth <= 1000) {
       dispatch(setDisplay('mobile'));
     } else {
@@ -22,11 +22,9 @@ const Main = () => {
   }
 
   useEffect(() => {
-    displayWindowSize();
-    window.addEventListener("resize", displayWindowSize);
-    return () => {
-      window.removeEventListener("resize", displayWindowSize);
-    }
+    windowSize();
+    window.addEventListener("resize", windowSize);
+    return () => { window.removeEventListener("resize", windowSize) }
   }, [])
 
   useEffect(() => {
