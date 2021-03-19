@@ -11,6 +11,7 @@ export const editSlice = createSlice({
   },
   reducers: {
     setContact: (state, action) => {
+      console.log(action.payload);
       state.id = action.payload.id;
       state.editFirst = action.payload.first;
       state.editLast = action.payload.last;

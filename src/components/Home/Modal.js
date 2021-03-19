@@ -2,26 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { setModal } from '../../redux/modal.js';
 import { setContacts } from '../../redux/contacts.js';
 import { flexBetween, BlueBtn, YellowBtn } from '../globalComponents.js';
 
 const Modal = () => {
-  const { open, name, email } = useSelector(state => state.modal);
+  const { open, id, name, email } = useSelector(state => state.modal);
+  const { contacts } = useSelector(state => state.contact);
   const dispatch = useDispatch();
 
   const deleteContact = () => {
-    axios.delete(`${window.location.origin}/delete`, { data: {email} })
-    .then(() => {
-      axios.get(`${window.location.origin}/get`)
-      .then((res) => {
-        dispatch(setContacts(res.data));
+    const data = JSON.parse(localStorage.getItem('contacts'));
+    for (let i = 0; i < contacts.length; i++) {
+      if (contacts[i].id === id) {
+        data.splice(i, 1);
+        localStorage.setItem('contacts', JSON.stringify(data));
         dispatch(setModal(''));
-      })
-      .catch((e) => { alert('Error getting contacts', e)});
-    })
-    .catch((e) => { alert('Error deleting contact', e) });
+        dispatch(setContacts(data));
+        break;
+      }
+    }
   };
 
   const contentProps = useSpring({

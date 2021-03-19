@@ -53,8 +53,6 @@ Contact list web application.
 __Built with__
 - React
 - Redux Toolkit
-- Node.js
-- MongoDB
 - Webpack
 - Styled Components
 - React Router
@@ -63,9 +61,6 @@ __Built with__
 ## Run the Project Locally ##
 From the repo
 1. Clone the project locally
-2. Ensure you have MongoDB installed by running ```mongo --version``` in the command line
-3. Run ```npm install``` in the command line
-4. Run ```npm run seed``` in the command line to seed the database
-  - Once the names of the 8 musicians appear in the console, cancel from the running command (^c on Mac)
-5. Run ```npm run server``` in the command line to start the server
-6. Open [http://localhost:8000](http://localhost:8000) with your browser to see the result
+2. Run ```npm install``` in the command line
+3. Run ```npm run dev-server``` in the command line to start the server
+4. Open [http://localhost:8080](http://localhost:8080) with your browser to see the result

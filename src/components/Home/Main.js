@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import Contact from './Contact.js';
 import Create from './Create.js';
 import Header from '../Header.js';
@@ -19,20 +18,17 @@ const Main = () => {
     } else {
       dispatch(setDisplay('desktop'));
     }
-  }
+  };
 
   useEffect(() => {
     windowSize();
     window.addEventListener("resize", windowSize);
     return () => { window.removeEventListener("resize", windowSize) }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    axios.get(`${window.location.origin}/get`)
-    .then((res) => {
-      dispatch(setContacts(res.data));
-    })
-    .catch((e) => { alert('Error getting contacts', e) });
+    const data = JSON.parse(localStorage.getItem('contacts'));
+    dispatch(setContacts(data));
   }, []);
 
   return (
@@ -40,16 +36,18 @@ const Main = () => {
       <Header />
       <Create />
       <Contacts>
-        {contacts.map((i) => (
-          <Contact
-            id={i._id}
-            first={i.first}
-            last={i.last}
-            number={i.phone}
-            email={i.email}
-            key={i._id}
-          />
-        ))}
+        {contacts.map((i) => {
+          return (
+            <Contact
+              id={i.id}
+              first={i.first}
+              last={i.last}
+              number={i.phone}
+              email={i.email}
+              key={i.id}
+            />
+          )
+        })}
       </Contacts>
     </Container>
   )

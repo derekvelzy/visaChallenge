@@ -97,7 +97,7 @@ const Contact = ({ id, first, last, number, email }) => {
   const numProps = useSpring({
     fontSize: seCondition ? (dispCondition ? '22px' : '18px') : (dispCondition ? '16px' : '14px'),
     marginBottom: seCondition ? (dispCondition ? '20px' : '10px') : '0px',
-    from: { fontSize: dispCondition ? '16px' : '12px' },
+    from: { fontSize: dispCondition ? '16px' : '12px', marginBottom: '0px' },
     config: { mass: 1, tension: 250, friction: 20 },
     delay: leCondition ? 0 : (dispCondition ? 600 : 100)
   });
@@ -141,7 +141,7 @@ const Contact = ({ id, first, last, number, email }) => {
             </BlueBtn>
           </animated.div>
           <animated.div style={visProps}>
-            <YellowBtn onClick={() => dispatch(setModal({name: `${first} ${last}`, email}))}>
+            <YellowBtn onClick={() => dispatch(setModal({id, name: `${first} ${last}`, email}))}>
               Delete
             </YellowBtn>
           </animated.div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import axios from 'axios';
 import Header from '../Header.js';
 import { setContacts } from '../../redux/contacts.js';
 import {
@@ -11,6 +10,7 @@ import {
 
 const FormPage = () => {
   const { id, editFirst, editLast, editPhone, editEmail } = useSelector(state => state.edit);
+  const { contacts } = useSelector(state => state.contact);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -25,7 +25,7 @@ const FormPage = () => {
   const [emailErr, setEmailErr] = useState(false);
 
   useEffect(() => {
-    if (!id && window.location.pathname === '/edit') {
+    if ((!id && id !== 0) && window.location.pathname === '/edit') {
       history.push('/');
     } else if (window.location.pathname === '/edit') {
       setStatics(['Edit Contact', 'Save']);
@@ -70,24 +70,25 @@ const FormPage = () => {
     if (!lastex) setLastErr(true);
     if (!phoneex) setPhoneErr(true);
     if (!emailex) setEmailErr(true);
+    const data = JSON.parse(localStorage.getItem('contacts'));
     if (window.location.pathname === '/edit' && firstex && lastex && phoneex && emailex) {
-      axios.patch(`${window.location.origin}/patch`, { data: {id, first, last, phone, email } })
-      .then(() => { resetData() })
-      .catch((e) => alert('Error updating user', e));
+      for (let i = 0; i < contacts.length; i++) {
+        if (contacts[i].id === id) {
+          data[i] = { id, first, last, phone, email };
+          localStorage.setItem('contacts', JSON.stringify(data));
+          history.push('/');
+          break;
+        }
+      }
     } else if (window.location.pathname === '/create' && firstex && lastex && phoneex && emailex) {
-      axios.post(`${window.location.origin}/post`, { data: {first, last, phone, email } })
-      .then(() => { resetData() })
-      .catch((e) => alert('Error adding user', e));
+      let nextIndex = 0;
+      if (data.length > 0) {
+        nextIndex = data[data.length - 1].id + 1;
+      }
+      data.push({ id: nextIndex, first, last, phone, email });
+      localStorage.setItem('contacts', JSON.stringify(data));
+      history.push('/');
     }
-  };
-
-  const resetData = () => {
-    axios.get(`${window.location.origin}/get`)
-      .then((res) => {
-        dispatch(setContacts(res.data));
-        history.push('/');
-      })
-      .catch((e) => alert('Error getting contacts', e));
   };
 
   return (
